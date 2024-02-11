@@ -22,7 +22,9 @@ function date(): string {
 
 async function main() {
   try {
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({
+      headless: false,
+    });
     const page = await browser.newPage();
     await page.setViewport({ width: 1080, height: 1024 });
 
@@ -36,7 +38,7 @@ async function main() {
       waitUntil: "networkidle2",
     });
 
-    await page.select("select#form", "Granada");
+    await page.select("#form", "Granada");
     const accept = await page.waitForSelector("#btnAceptar");
     await accept?.click();
     await page.waitForNavigation({
@@ -44,10 +46,10 @@ async function main() {
     });
 
     await page.select(
-      "select#sede",
+      "#sede",
       "Oficina de Extranjería en Granada, San Agapito, 2"
     );
-    await page.select("select#tramiteGrupo[0]", "SOLICITUD DE AUTORIZACIONES");
+    await page.select("#tramiteGrupo[0]", "SOLICITUD DE AUTORIZACIONES");
     const accept2 = await page.$("#btnAceptar");
     await accept2?.click();
     await page.waitForNavigation({
@@ -60,7 +62,7 @@ async function main() {
       waitUntil: "networkidle2",
     });
 
-    const passportRadio = await page.$("#rdbTipoDocPas");
+    const passportRadio = await page.waitForSelector("#rdbTipoDocPas");
     await passportRadio?.click();
     await page.type("#txtIdCitado", NIE);
     await page.type("#txtDesCitado", NOMBRE);
