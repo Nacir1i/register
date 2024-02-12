@@ -20,10 +20,15 @@ function date(): string {
   return `${hour}-${minute}-${second}`;
 }
 
+async function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 async function main() {
   try {
     const browser = await puppeteer.launch({
       headless: false,
+      // args: ["--proxy-server=195.114.209.50:80"],
     });
     const page = await browser.newPage();
     await page.setViewport({ width: 1080, height: 1024 });
@@ -34,50 +39,37 @@ async function main() {
 
     const submit = await page.waitForSelector("#submit");
     await submit?.click();
-    await page.waitForNavigation({
-      waitUntil: "networkidle2",
-    });
 
-    await page.select("#form", "Granada");
+    const _await = await page.waitForSelector("#form");
+    await page.select("select#form", "/icpplus/citar?p=18&locale=es");
     const accept = await page.waitForSelector("#btnAceptar");
     await accept?.click();
-    await page.waitForNavigation({
-      waitUntil: "networkidle2",
-    });
 
-    await page.select(
-      "#sede",
-      "Oficina de Extranjería en Granada, San Agapito, 2"
-    );
-    await page.select("#tramiteGrupo[0]", "SOLICITUD DE AUTORIZACIONES");
-    const accept2 = await page.$("#btnAceptar");
+    const _await2 = await page.waitForSelector("#sede");
+    await page.select("#sede", "1");
+    const select = await page.waitForSelector('select[name="tramiteGrupo[0]"]');
+    await select?.select("4");
+    // await page.select('select[name="tramiteGrupo[0]"]', "4");
+    const accept2 = await page.waitForSelector("#btnAceptar");
     await accept2?.click();
-    await page.waitForNavigation({
-      waitUntil: "networkidle2",
-    });
 
+    const _await3 = await page.waitForSelector("#btnEntrar");
     const enter = await page.waitForSelector("#btnEntrar");
     await enter?.click();
-    await page.waitForNavigation({
-      waitUntil: "networkidle2",
-    });
 
+    const _await4 = await page.waitForSelector("#rdbTipoDocPas");
     const passportRadio = await page.waitForSelector("#rdbTipoDocPas");
     await passportRadio?.click();
-    await page.type("#txtIdCitado", NIE);
-    await page.type("#txtDesCitado", NOMBRE);
-    await page.type("#txtAnnoCitado", YEAR);
+    await page.type("#txtIdCitado", NIE, {delay: 120});
+    const nomberInput = await page.waitForSelector("#txtDesCitado");
+    await nomberInput?.type(NOMBRE, {delay: 120});
+    await page.$eval('#txtAnnoCitado', field => field.value = 1999);
     const accept3 = await page.waitForSelector("#btnEnviar");
     await accept3?.click();
-    await page.waitForNavigation({
-      waitUntil: "networkidle2",
-    });
 
+    const _await5 = await page.waitForSelector("#btnEnviar");
     const sendRequest = await page.waitForSelector("#btnEnviar");
     await sendRequest?.click();
-    await page.waitForNavigation({
-      waitUntil: "networkidle2",
-    });
 
     const resultContainer = await page.waitForSelector(
       "#mainWindow > div > div.mf-layout--main > section > div.mf-main--content.ac-custom-content > form > input[type=hidden]:nth-child(1)"
