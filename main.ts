@@ -41,11 +41,13 @@ async function main() {
     await submit?.click();
 
     const _await = await page.waitForSelector("#form");
+    sleep(500);
     await page.select("select#form", "/icpplus/citar?p=18&locale=es");
     const accept = await page.waitForSelector("#btnAceptar");
     await accept?.click();
 
     const _await2 = await page.waitForSelector("#sede");
+    sleep(500);
     await page.select("#sede", "1");
     const select = await page.waitForSelector('select[name="tramiteGrupo[0]"]');
     await select?.select("4");
@@ -54,10 +56,12 @@ async function main() {
     await accept2?.click();
 
     const _await3 = await page.waitForSelector("#btnEntrar");
+    sleep(500);
     const enter = await page.waitForSelector("#btnEntrar");
     await enter?.click();
 
     const _await4 = await page.waitForSelector("#rdbTipoDocPas");
+    sleep(500);
     const passportRadio = await page.waitForSelector("#rdbTipoDocPas");
     await passportRadio?.click();
     await page.type("#txtIdCitado", NIE, {delay: 120});
@@ -68,6 +72,7 @@ async function main() {
     await accept3?.click();
 
     const _await5 = await page.waitForSelector("#btnEnviar");
+    sleep(500);
     const sendRequest = await page.waitForSelector("#btnEnviar");
     await sendRequest?.click();
 
